@@ -1,0 +1,13 @@
+# Workspace version: 1.44.7
+# databutton==0.38.34 - Commented out as it's not available
+ipykernel==6.29.5
+fastapi==0.111.0
+python-multipart==0.0.9
+uvicorn[standard]==0.29.0
+
+openai
+beautifulsoup4
+requests
+pyjwt==2.8.0
+python-jose==3.3.0
+supabase==2.3.5

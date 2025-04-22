@@ -1,0 +1,459 @@
+/* Luxury Theme CSS */
+
+/* Elegant Typography */
+.luxury-heading {
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.luxury-body {
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+/* Smooth Animations */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-luxury::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.btn-luxury:hover::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(100, 100);
+    opacity: 0;
+  }
+}
+
+/* Elegant Card Hover Effects */
+.luxury-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.luxury-card:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  transform: translateY(-5px);
+}
+
+/* Gradient Backgrounds */
+.luxury-gradient-blue {
+  background: linear-gradient(135deg, #1a365d 0%, #2563eb 100%);
+}
+
+.luxury-gradient-purple {
+  background: linear-gradient(135deg, #4a1d96 0%, #8b5cf6 100%);
+}
+
+.luxury-gradient-gold {
+  background: linear-gradient(135deg, #92400e 0%, #fbbf24 100%);
+}
+
+/* Shimmer Effect */
+.luxury-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+/* Smooth Fade In Animation */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elegant Input Focus Effects */
+.luxury-input {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(209, 213, 219, 0.5);
+}
+
+.luxury-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+/* Subtle Hover Transitions */
+.luxury-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.luxury-hover-effect:hover {
+  filter: brightness(1.1);
+}
+
+/* Elegant Scrollbar */
+.luxury-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.luxury-scrollbar::-webkit-scrollbar-track {
+  background: rgba(243, 244, 246, 0.5);
+  border-radius: 10px;
+}
+
+.luxury-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+  border-radius: 10px;
+}
+
+.luxury-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* Elegant Dropdown Animation */
+.luxury-dropdown {
+  transform-origin: top center;
+  animation: dropdownOpen 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Elegant Badge */
+.luxury-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  100% {
+    left: 100%;
+  }
+}
+
+/* Elegant Button Pulse */
+.luxury-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+/* Elegant Tooltip */
+.luxury-tooltip {
+  position: relative;
+}
+
+.luxury-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background: rgba(17, 24, 39, 0.9);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.luxury-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Elegant Focus Ring */
+.luxury-focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+}
+
+/* Elegant Checkbox */
+.luxury-checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid #d1d5db;
+  transition: all 0.2s ease;
+}
+
+.luxury-checkbox:checked {
+  border-color: #4f46e5;
+  background-color: #4f46e5;
+}
+
+.luxury-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Elegant Switch */
+.luxury-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.luxury-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.luxury-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d1d5db;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.luxury-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.luxury-switch input:checked + .luxury-switch-slider {
+  background-color: #4f46e5;
+}
+
+.luxury-switch input:checked + .luxury-switch-slider:before {
+  transform: translateX(16px);
+}
+
+/* Elegant Loading Spinner */
+.luxury-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(79, 70, 229, 0.3);
+  border-radius: 50%;
+  border-top-color: #4f46e5;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Elegant Progress Bar */
+.luxury-progress {
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.luxury-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Elegant Divider */
+.luxury-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(209, 213, 219, 0.5), transparent);
+}
+
+/* Elegant Tag */
+.luxury-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: rgba(243, 244, 246, 0.8);
+  border: 1px solid rgba(209, 213, 219, 0.5);
+  border-radius: 9999px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.luxury-tag:hover {
+  background-color: rgba(229, 231, 235, 0.8);
+  transform: translateY(-1px);
+}
+
+/* Elegant Notification Badge */
+.luxury-notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 18px;
+  height: 18px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Elegant Backdrop Blur */
+.luxury-backdrop {
+  backdrop-filter: blur(8px);
+  background-color: rgba(17, 24, 39, 0.6);
+}
+
+/* Elegant Glass Effect */
+.luxury-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Elegant Text Gradient */
+.luxury-text-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* Elegant Border Gradient */
+.luxury-border-gradient {
+  position: relative;
+  border-radius: 0.5rem;
+  padding: 1px;
+  background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+}
+
+.luxury-border-gradient-inner {
+  background: white;
+  border-radius: 0.5rem;
+  height: 100%;
+  width: 100%;
+}
+
+/* Elegant Skeleton Loading */
+.luxury-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(243, 244, 246, 0.8) 25%,
+    rgba(229, 231, 235, 0.8) 50%,
+    rgba(243, 244, 246, 0.8) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerSkeleton 1.5s infinite;
+  border-radius: 0.25rem;
+}
+
+@keyframes shimmerSkeleton {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

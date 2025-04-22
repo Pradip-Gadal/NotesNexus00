@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standalone Auth Component Test</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #003366, #004080, #0059b3, #0073e6);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: white;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Standalone Auth Component</h1>
+      <p>This is a test page for the standalone authentication component</p>
+    </div>
+    <div id="auth-container">
+      <!-- The AuthForm component will be rendered here -->
+    </div>
+  </div>
+  
+  <script>
+    // This is just a placeholder. In a real application, you would use React to render the component.
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('auth-container');
+      container.innerHTML = '<p style="color: white; text-align: center;">The AuthForm component would be rendered here in a React application.</p>';
+    });
+  </script>
+</body>
+</html>
