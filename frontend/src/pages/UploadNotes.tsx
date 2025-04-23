@@ -1,14 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ChevronLeft, 
-  FileText, 
-  Upload, 
-  Image, 
-  Check, 
-  AlertCircle,
-  X
+import {
+  ChevronLeft,
+  FileText,
+  Upload,
+  Image,
+  Check,
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useUser } from '../contexts/UserContext';
+import { supabase } from '../utils/supabaseClient';
 import { toast } from 'sonner';
 import "../styles/luxury-theme.css";
 
@@ -62,12 +62,12 @@ const faculties = [
 
 export default function UploadNotes() {
   const navigate = useNavigate();
-  const { user, profile } = useUser();
+  const { user } = useUser(); // We need the user for the upload process
   const [currentStep, setCurrentStep] = useState(1);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -75,9 +75,10 @@ export default function UploadNotes() {
     academicLevel: '',
     grade: '',
     faculty: '',
-    tags: '',
+    subjectCode: '',
     file: null as File | null,
     coverImage: null as File | null,
+    tags: '' // Add tags field to state
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -114,7 +115,7 @@ export default function UploadNotes() {
       ...formData,
       [name]: value
     });
-    
+
     // Reset grade when academic level changes
     if (name === 'academicLevel') {
       setFormData(prev => ({...prev, grade: ''}));
@@ -137,17 +138,90 @@ export default function UploadNotes() {
 
   const handleSubmit = async () => {
     setIsUploading(true);
+    setUploadError(false);
 
-    // Simulate upload process
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create a new FormData object with a different name to avoid conflict
+      const uploadFormData = new FormData();
+
+      // Append all form fields
+      uploadFormData.append('title', formData.title);
+      uploadFormData.append('description', formData.description);
+      uploadFormData.append('academic_level', formData.academicLevel);
+      uploadFormData.append('grade', formData.grade);
+      uploadFormData.append('subject', formData.subject);
+      uploadFormData.append('subject_code', formData.subjectCode);
+
+      if (formData.faculty) {
+        uploadFormData.append('faculty', formData.faculty);
+      }
+
+      // Append files
+      if (formData.file) {
+        uploadFormData.append('file', formData.file);
+      }
+      if (formData.coverImage) {
+        uploadFormData.append('cover_image', formData.coverImage);
+      }
+
+      // Append tags if they exist
+      if (formData.tags) {
+        const tags = formData.tags.split(',').map((tag: string) => tag.trim());
+        tags.forEach((tag: string) => uploadFormData.append('tags', tag));
+      }
+
+      // Add user ID to the form data if user is logged in
+      if (user?.id) {
+        uploadFormData.append('user_id', user.id);
+      }
+
+      // Get the current session for authentication token
+      const { data: { session } } = await supabase.auth.getSession();
+
+      // Prepare headers
+      const headers: Record<string, string> = {};
+
+      // Add authorization header if session exists
+      if (session && session.access_token) {
+        console.log('Using access token:', session.access_token);
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      } else {
+        console.log('No active session, proceeding without authentication');
+      }
+
+      // Note: Do not set Content-Type when sending FormData
+      // The browser will automatically set the correct Content-Type with boundary
+
+      // Send to backend with or without authentication token
+      const response = await fetch('/api/notes/upload', {
+        method: 'POST',
+        headers,
+        body: uploadFormData,
+      });
+
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Upload failed with status:', response.status, errorText);
+        throw new Error(`Upload failed: ${response.status} ${errorText || response.statusText}`);
+      }
+
       setUploadSuccess(true);
-      setIsUploading(false);
-      toast.success("Your note has been uploaded successfully!");
+      toast.success("Note uploaded successfully!");
+
     } catch (error) {
+      console.error('Upload error:', error);
       setUploadError(true);
+      toast.error(`Failed to upload note: ${error instanceof Error ? error.message : 'Unknown error'}`);
+
+      // Check if the error is related to authentication
+      if (error instanceof Error && error.message.includes('401')) {
+        // Suggest the user to log in again
+        toast.error('Authentication failed. Please log in again.');
+      }
+    } finally {
       setIsUploading(false);
-      toast.error("Failed to upload your note. Please try again.");
     }
   };
 
@@ -251,7 +325,7 @@ export default function UploadNotes() {
             ))}
           </div>
           <div className="relative h-2 bg-gray-200 rounded-full mt-2">
-            <div 
+            <div
               className="absolute top-0 left-0 h-full bg-indigo-600 rounded-full transition-all duration-500"
               style={{ width: `${(currentStep - 1) * 33.33}%` }}
             ></div>
@@ -336,9 +410,9 @@ export default function UploadNotes() {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">Note Details</h2>
 
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-gray-700">Title <span className="text-red-500">*</span></Label>
+                <Label htmlFor="note-title" className="text-gray-700">Title <span className="text-red-500">*</span></Label>
                 <Input
-                  id="title"
+                  id="note-title"
                   name="title"
                   placeholder="Enter a descriptive title"
                   value={formData.title}
@@ -348,9 +422,9 @@ export default function UploadNotes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-gray-700">Description <span className="text-red-500">*</span></Label>
+                <Label htmlFor="note-description" className="text-gray-700">Description <span className="text-red-500">*</span></Label>
                 <Textarea
-                  id="description"
+                  id="note-description"
                   name="description"
                   placeholder="Describe what this note covers..."
                   value={formData.description}
@@ -360,20 +434,20 @@ export default function UploadNotes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tags" className="text-gray-700">Tags (comma separated)</Label>
+                <Label htmlFor="note-subject-code" className="text-gray-700">Subject Code</Label>
                 <Input
-                  id="tags"
-                  name="tags"
-                  placeholder="e.g., algebra, equations, mathematics"
-                  value={formData.tags}
+                  id="note-subject-code"
+                  name="subjectCode"
+                  placeholder="e.g., MATH101, CS201, PHYS301"
+                  value={formData.subjectCode}
                   onChange={handleInputChange}
                   className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                 />
-                <p className="text-xs text-gray-500">Tags help others find your notes more easily</p>
+                <p className="text-xs text-gray-500">Enter a subject code to categorize your notes more precisely</p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="coverImage" className="text-gray-700">Cover Image (optional)</Label>
+                <Label htmlFor="note-cover-image" className="text-gray-700">Cover Image (optional)</Label>
                 <div
                   className={`border border-gray-300 rounded-lg p-4 text-center cursor-pointer transition-all hover:border-indigo-500 ${
                     formData.coverImage ? 'bg-indigo-50' : ''
@@ -414,6 +488,7 @@ export default function UploadNotes() {
                 </div>
                 <input
                   type="file"
+                  id="note-cover-image"
                   ref={coverImageRef}
                   className="hidden"
                   accept="image/*"
@@ -434,12 +509,12 @@ export default function UploadNotes() {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">Categorize Your Note</h2>
 
               <div className="space-y-2">
-                <Label htmlFor="subject" className="text-gray-700">Subject <span className="text-red-500">*</span></Label>
+                <Label htmlFor="note-subject" className="text-gray-700">Subject <span className="text-red-500">*</span></Label>
                 <Select
                   value={formData.subject}
                   onValueChange={(value) => handleSelectChange('subject', value)}
                 >
-                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                  <SelectTrigger id="note-subject" className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                     <SelectValue placeholder="Select a subject" />
                   </SelectTrigger>
                   <SelectContent>
@@ -453,12 +528,12 @@ export default function UploadNotes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="academicLevel" className="text-gray-700">Academic Level <span className="text-red-500">*</span></Label>
+                <Label htmlFor="note-academic-level" className="text-gray-700">Academic Level <span className="text-red-500">*</span></Label>
                 <Select
                   value={formData.academicLevel}
                   onValueChange={(value) => handleSelectChange('academicLevel', value)}
                 >
-                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                  <SelectTrigger id="note-academic-level" className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                     <SelectValue placeholder="Select academic level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -472,13 +547,13 @@ export default function UploadNotes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="grade" className="text-gray-700">Grade/Year <span className="text-red-500">*</span></Label>
+                <Label htmlFor="note-grade" className="text-gray-700">Grade/Year <span className="text-red-500">*</span></Label>
                 <Select
                   value={formData.grade}
                   onValueChange={(value) => handleSelectChange('grade', value)}
                   disabled={!formData.academicLevel}
                 >
-                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                  <SelectTrigger id="note-grade" className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                     <SelectValue placeholder={formData.academicLevel ? "Select grade/year" : "Select academic level first"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -492,13 +567,13 @@ export default function UploadNotes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="faculty" className="text-gray-700">Faculty (for higher education)</Label>
+                <Label htmlFor="note-faculty" className="text-gray-700">Faculty (for higher education)</Label>
                 <Select
                   value={formData.faculty}
                   onValueChange={(value) => handleSelectChange('faculty', value)}
                   disabled={!['bachelors', 'masters'].includes(formData.academicLevel)}
                 >
-                  <SelectTrigger className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                  <SelectTrigger id="note-faculty" className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                     <SelectValue placeholder={['bachelors', 'masters'].includes(formData.academicLevel) ? "Select faculty" : "Only for higher education"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -618,16 +693,10 @@ export default function UploadNotes() {
                     </div>
 
                     <div className="space-y-1">
-                      <span className="font-medium text-gray-700 block">Tags:</span>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.tags ? formData.tags.split(',').map((tag, index) => (
-                          <span key={index} className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs">
-                            {tag.trim()}
-                          </span>
-                        )) : (
-                          <span className="text-gray-500">No tags</span>
-                        )}
-                      </div>
+                      <span className="font-medium text-gray-700 block">Subject Code:</span>
+                      <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-md text-sm inline-block">
+                        {formData.subjectCode ? formData.subjectCode : 'Not specified'}
+                      </span>
                     </div>
 
                     <div className="space-y-1">
@@ -699,3 +768,6 @@ export default function UploadNotes() {
     </motion.div>
   );
 }
+
+
+

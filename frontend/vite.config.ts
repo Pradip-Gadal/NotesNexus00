@@ -74,6 +74,21 @@ export default defineConfig({
 				target: "http://127.0.0.1:8000",
 				changeOrigin: true,
 			},
+			"/api/notes/upload": {
+				target: "http://127.0.0.1:8000",
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api\/notes\/upload/, '/routes/upload'),
+				configure: (proxy, _options) => {
+					proxy.on('error', (err, _req, _res) => {
+						console.log('proxy error', err);
+					});
+					proxy.on('proxyReq', (proxyReq, req, _res) => {
+						console.log('Proxying request to:', req.url);
+						// Log headers for debugging
+						console.log('Request headers:', req.headers);
+					});
+				}
+			},
 		},
 	},
 	resolve: {

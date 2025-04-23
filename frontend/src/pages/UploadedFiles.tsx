@@ -30,7 +30,7 @@ interface UploadedNote {
   likes: number;
   dislikes: number;
   status: 'published' | 'draft' | 'under review';
-  tags: string[];
+  acadamic_name: string;
 }
 
 const mockUploadedNotes: UploadedNote[] = [
@@ -46,7 +46,7 @@ const mockUploadedNotes: UploadedNote[] = [
     likes: 89,
     dislikes: 12,
     status: 'published',
-    tags: ['Calculus', 'Mathematics', 'Differentiation', 'Integration'],
+    acadamic_name: 'Kathmandu Model School',
   },
   {
     id: '2',
@@ -60,7 +60,7 @@ const mockUploadedNotes: UploadedNote[] = [
     likes: 76,
     dislikes: 8,
     status: 'published',
-    tags: ['Chemistry', 'Organic', 'Formulas'],
+    acadamic_name: 'St. Xavier\'s College',
   },
   {
     id: '3',
@@ -74,7 +74,7 @@ const mockUploadedNotes: UploadedNote[] = [
     likes: 45,
     dislikes: 5,
     status: 'published',
-    tags: ['Nepali', 'Literature', 'Analysis'],
+    acadamic_name: 'Lalitpur Secondary School',
   },
   {
     id: '4',
@@ -88,7 +88,7 @@ const mockUploadedNotes: UploadedNote[] = [
     likes: 210,
     dislikes: 15,
     status: 'draft',
-    tags: ['Programming', 'Computer Science', 'Basics'],
+    acadamic_name: 'Budhanilkantha School',
   },
 ];
 
@@ -308,11 +308,11 @@ export default function UploadedFiles() {
             </div>
 
             <div className="flex flex-wrap gap-1 mb-4">
-              {note.tags.map(tag => (
-                <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                  #{tag}
+              {note.acadamic_name && (
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                  {note.acadamic_name}
                 </span>
-              ))}
+              )}
             </div>
 
             <div className="flex justify-between items-center pt-3 border-t border-gray-100">

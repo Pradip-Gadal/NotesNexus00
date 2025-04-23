@@ -19,7 +19,7 @@ interface Note {
   downloads: number;
   likes: number;
   rating: number;
-  tags: string[];
+  academic_name: string;
 }
 
 const mockNotes: Note[] = [
@@ -35,7 +35,7 @@ const mockNotes: Note[] = [
     downloads: 567,
     likes: 89,
     rating: 4.7,
-    tags: ['Algebra', 'Equations', 'Mathematics'],
+    academic_name: 'Kathmandu Model School',
   },
   {
     id: '2',
@@ -49,7 +49,7 @@ const mockNotes: Note[] = [
     downloads: 432,
     likes: 76,
     rating: 4.5,
-    tags: ['Literature', 'Poetry', 'Nepali'],
+    academic_name: 'Lalitpur Secondary School',
   },
   {
     id: '3',
@@ -63,7 +63,7 @@ const mockNotes: Note[] = [
     downloads: 789,
     likes: 120,
     rating: 4.8,
-    tags: ['Biology', 'Cells', 'Science'],
+    academic_name: 'St. Xavier\'s College',
   },
   {
     id: '4',
@@ -77,7 +77,7 @@ const mockNotes: Note[] = [
     downloads: 1234,
     likes: 210,
     rating: 4.9,
-    tags: ['Grammar', 'English', 'Language'],
+    academic_name: 'Sunrise Elementary School',
   },
   {
     id: '5',
@@ -91,7 +91,7 @@ const mockNotes: Note[] = [
     downloads: 876,
     likes: 156,
     rating: 4.6,
-    tags: ['Programming', 'Computer Science', 'Coding'],
+    academic_name: 'St. Xavier\'s College',
   },
   {
     id: '6',
@@ -105,7 +105,7 @@ const mockNotes: Note[] = [
     downloads: 543,
     likes: 87,
     rating: 4.4,
-    tags: ['History', 'Nepal', 'Ancient'],
+    academic_name: 'Lalitpur Secondary School',
   },
 ];
 
@@ -126,8 +126,8 @@ export function RecentNotes() {
     .filter(note => {
       const matchesSearch = note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            note.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           note.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-
+                           note.academic_name.toLowerCase().includes(searchQuery.toLowerCase())
+                    
       const matchesSubject = selectedSubject === 'All Subjects' || note.subject === selectedSubject;
       const matchesLevel = selectedLevel === 'All Levels' || note.level === selectedLevel;
 
@@ -268,11 +268,11 @@ export function RecentNotes() {
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-4">
-                  {note.tags.map(tag => (
-                    <span key={tag} className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
-                      #{tag}
+                  {note.academic_name && (
+                    <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
+                      {note.academic_name}
                     </span>
-                  ))}
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center pt-3 border-t border-gray-700">

@@ -34,7 +34,7 @@ interface SavedFile {
   views: number;
   downloads: number;
   rating: number;
-  tags: string[];
+  academic_name: string;
 }
 
 const mockSavedFiles: SavedFile[] = [
@@ -50,7 +50,7 @@ const mockSavedFiles: SavedFile[] = [
     views: 3245,
     downloads: 1267,
     rating: 4.9,
-    tags: ['Quantum', 'Physics', 'Advanced'],
+    academic_name: 'Kathmandu Model School',
   },
   {
     id: '2',
@@ -64,7 +64,7 @@ const mockSavedFiles: SavedFile[] = [
     views: 1890,
     downloads: 945,
     rating: 4.7,
-    tags: ['Grammar', 'Nepali', 'Composition'],
+    academic_name: 'Lalitpur Secondary School',
   },
   {
     id: '3',
@@ -78,7 +78,7 @@ const mockSavedFiles: SavedFile[] = [
     views: 4567,
     downloads: 2189,
     rating: 4.8,
-    tags: ['DSA', 'Algorithms', 'Programming'],
+    academic_name: 'St. Xavier\'s College',
   },
   {
     id: '4',
@@ -92,7 +92,7 @@ const mockSavedFiles: SavedFile[] = [
     views: 2345,
     downloads: 1123,
     rating: 4.6,
-    tags: ['Chemistry', 'Organic', 'Reactions'],
+    academic_name: 'Budhanilkantha School',
   },
   {
     id: '5',
@@ -106,7 +106,7 @@ const mockSavedFiles: SavedFile[] = [
     views: 3120,
     downloads: 1567,
     rating: 4.5,
-    tags: ['Calculus', 'Mathematics', 'Problems'],
+    academic_name: 'Kathmandu University',
   },
 ];
 
@@ -129,7 +129,7 @@ export default function SavedFiles() {
     .filter(file => {
       const matchesSearch = file.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         file.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+                         file.academic_name.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesSubject = selectedSubject === 'All Subjects' || file.subject === selectedSubject;
       const matchesLevel = selectedLevel === 'All Levels' || file.level === selectedLevel;
@@ -305,11 +305,11 @@ export default function SavedFiles() {
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-4">
-                  {file.tags.map(tag => (
-                    <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                      #{tag}
+                  {file.academic_name && (
+                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                      {file.academic_name}
                     </span>
-                  ))}
+                  )}
                 </div>
 
                 <div className="flex justify-between items-center pt-3 border-t border-gray-100">
